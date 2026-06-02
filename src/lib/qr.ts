@@ -6,6 +6,12 @@ export type QrGenerateResult =
   | { ok: true; dataUrl: string }
   | { ok: false; error: string };
 
+export function isQrGenerateFailure(
+  result: QrGenerateResult,
+): result is Extract<QrGenerateResult, { ok: false }> {
+  return result.ok === false;
+}
+
 export async function generateQrDataUrl(value: string): Promise<QrGenerateResult> {
   try {
     const dataUrl = await QRCode.toDataURL(value, {

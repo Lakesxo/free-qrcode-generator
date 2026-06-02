@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { FloatingShapes } from "./FloatingShapes";
+import { StatsCounter } from "./StatsCounter";
 import "./Layout.css";
 
 type LayoutProps = {
@@ -11,12 +12,15 @@ export function Layout({ children }: LayoutProps) {
     <div className="layout">
       <FloatingShapes />
       <header className="layout__header">
-        <a className="layout__logo" href="/">
-          <span className="layout__logo-mark" aria-hidden="true">
-            ▣
-          </span>
-          Free QR
-        </a>
+        <div className="layout__header-bar">
+          <a className="layout__logo" href="/">
+            <span className="layout__logo-mark" aria-hidden="true">
+              ▣
+            </span>
+            Free QR
+          </a>
+          <StatsCounter />
+        </div>
       </header>
       <main className="layout__main">{children}</main>
       <footer className="layout__footer">

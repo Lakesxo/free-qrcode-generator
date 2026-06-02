@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { generateQrDataUrl } from "../lib/qr";
+import { generateQrDataUrl, isQrGenerateFailure } from "../lib/qr";
 
 type QrState =
   | { status: "idle" }
@@ -27,17 +27,18 @@ export function useQrCode(url: string | null, enabled: boolean): QrState {
       const result = await generateQrDataUrl(requestKey);
       if (cancelled) return;
 
-      if (result.ok) {
-        setGeneration({
-          key: requestKey,
-          state: { status: "ready", dataUrl: result.dataUrl },
-        });
-      } else {
+      if (isQrGenerateFailure(result)) {
         setGeneration({
           key: requestKey,
           state: { status: "error", message: result.error },
         });
+        return;
       }
+
+      setGeneration({
+        key: requestKey,
+        state: { status: "ready", dataUrl: result.dataUrl },
+      });
     }, 300);
 
     return () => {
