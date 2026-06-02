@@ -9,10 +9,14 @@ import { fetchDownloadCount, recordDownload } from "../lib/stats";
 import { StatsContext } from "./stats-context";
 
 export function StatsProvider({ children }: { children: ReactNode }) {
-  const [count, setCount] = useState<number | null>(null);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetchDownloadCount().then(setCount);
+    fetchDownloadCount().then((value) => {
+      if (value !== null) {
+        setCount(value);
+      }
+    });
   }, []);
 
   const trackDownload = useCallback(async () => {

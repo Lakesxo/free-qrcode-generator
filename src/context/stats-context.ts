@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export type StatsContextValue = {
-  count: number | null;
+  count: number;
   trackDownload: () => Promise<void>;
 };
 

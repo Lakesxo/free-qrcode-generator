@@ -4,10 +4,6 @@ import "./StatsCounter.css";
 export function StatsCounter() {
   const { count } = useStats();
 
-  if (count === null) {
-    return null;
-  }
-
   return (
     <p className="stats-counter" aria-live="polite">
       <span className="stats-counter__emoji" aria-hidden="true">
