@@ -1,0 +1,36 @@
+:root {
+  --font-display: "Fredoka", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --bg: #fff8f0;
+  --bg-warm: #ffe8d4;
+  --surface: #ffffff;
+  --ink: #1e1633;
+  --muted: #6b6280;
+  --border: #e8dff5;
+
+  --coral: #ff6b6b;
+  --coral-dark: #e85555;
+  --sun: #ffd93d;
+  --mint: #4ecdc4;
+  --grape: #7c5cfc;
+  --grape-soft: #ede8ff;
+
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 40px;
+
+  --shadow-soft: 0 8px 32px rgba(124, 92, 252, 0.12);
+  --shadow-card: 0 16px 48px rgba(30, 22, 51, 0.1);
+  --shadow-pop: 0 4px 0 rgba(30, 22, 51, 0.15);
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 40px;
+  --space-5: 64px;
+  --space-6: 96px;
+
+  --max-width: 1120px;
+}

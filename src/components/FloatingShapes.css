@@ -1,0 +1,49 @@
+.floating-shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0.55;
+  filter: blur(0.5px);
+}
+
+.shape--coral {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at 30% 30%, #ff8a8a, var(--coral));
+}
+
+.shape--sun {
+  width: 88px;
+  height: 88px;
+  background: radial-gradient(circle at 30% 30%, #ffe566, var(--sun));
+}
+
+.shape--mint {
+  width: 96px;
+  height: 96px;
+  background: radial-gradient(circle at 30% 30%, #7ee8e0, var(--mint));
+}
+
+.shape--grape {
+  width: 72px;
+  height: 72px;
+  background: radial-gradient(circle at 30% 30%, #a78bfa, var(--grape));
+}
+
+.shape--sm {
+  width: 48px;
+  height: 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shape {
+    opacity: 0.35;
+  }
+}

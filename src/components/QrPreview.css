@@ -1,0 +1,84 @@
+.qr-preview {
+  width: 100%;
+}
+
+.qr-preview__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: linear-gradient(160deg, #ffffff 0%, var(--grape-soft) 100%);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.qr-preview__badge {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--sun);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-pop);
+}
+
+.qr-preview__frame {
+  display: grid;
+  place-items: center;
+  width: min(100%, 280px);
+  aspect-ratio: 1;
+  padding: var(--space-2);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 3px dashed var(--border);
+}
+
+.qr-preview__image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+.qr-preview__placeholder {
+  text-align: center;
+  padding: var(--space-2);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.qr-preview__placeholder-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: var(--space-1);
+  opacity: 0.35;
+}
+
+.qr-preview__download {
+  width: 100%;
+  padding: 16px 24px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--coral), #ff8787);
+  color: white;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-pop);
+  transition: opacity 0.2s ease;
+}
+
+.qr-preview__download:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.qr-preview__download:not(:disabled):hover {
+  background: linear-gradient(135deg, var(--coral-dark), var(--coral));
+}
