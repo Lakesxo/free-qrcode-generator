@@ -12,7 +12,16 @@ type GenerationCache = {
   state: Exclude<QrState, { status: "idle" }>;
 };
 
-export function useQrCode(url: string | null, enabled: boolean): QrState {
+type UseQrCodeOptions = {
+  debounceMs?: number;
+};
+
+export function useQrCode(
+  url: string | null,
+  enabled: boolean,
+  options: UseQrCodeOptions = {},
+): QrState {
+  const { debounceMs = 300 } = options;
   const [generation, setGeneration] = useState<GenerationCache | null>(null);
   const requestKey = enabled && url ? url : "";
 
@@ -21,7 +30,7 @@ export function useQrCode(url: string | null, enabled: boolean): QrState {
 
     let cancelled = false;
 
-    const timer = window.setTimeout(async () => {
+    const run = async () => {
       setGeneration({ key: requestKey, state: { status: "loading" } });
 
       const result = await generateQrDataUrl(requestKey);
@@ -39,13 +48,15 @@ export function useQrCode(url: string | null, enabled: boolean): QrState {
         key: requestKey,
         state: { status: "ready", dataUrl: result.dataUrl },
       });
-    }, 300);
+    };
+
+    const timer = window.setTimeout(run, debounceMs);
 
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [requestKey]);
+  }, [requestKey, debounceMs]);
 
   if (!requestKey) {
     return { status: "idle" };

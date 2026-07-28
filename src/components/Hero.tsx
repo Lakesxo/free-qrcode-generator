@@ -1,25 +1,35 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { getDeepLinkUrlParam } from "../lib/deepLink";
 import { useUrlValidation } from "../hooks/useUrlValidation";
 import { useQrCode } from "../hooks/useQrCode";
 import { UrlInput } from "./UrlInput";
 import { QrPreview } from "./QrPreview";
+import { DeepLinkQrModal } from "./DeepLinkQrModal";
 import "./Hero.css";
 
 gsap.registerPlugin(useGSAP);
 
 export function Hero() {
-  const [urlInput, setUrlInput] = useState("");
+  const [openedViaDeepLink] = useState(() => getDeepLinkUrlParam() !== null);
+
+  const [urlInput, setUrlInput] = useState(() => getDeepLinkUrlParam() ?? "");
+  const [deepLinkModalDismissed, setDeepLinkModalDismissed] = useState(false);
+
   const validation = useUrlValidation(urlInput);
   const qrState = useQrCode(
     validation.valid ? validation.normalized : null,
     validation.valid,
+    { debounceMs: openedViaDeepLink ? 0 : 300 },
   );
 
   const heroRef = useRef<HTMLElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+
+  const showDeepLinkModal =
+    openedViaDeepLink && validation.valid && !deepLinkModalDismissed;
 
   useGSAP(
     () => {
@@ -48,6 +58,15 @@ export function Hero() {
 
   return (
     <section className="hero" ref={heroRef}>
+      <DeepLinkQrModal
+        open={showDeepLinkModal}
+        onClose={() => setDeepLinkModalDismissed(true)}
+        dataUrl={dataUrl}
+        isLoading={isLoading}
+        isReady={isReady}
+        urlLabel={validation.normalized}
+      />
+
       <div className="hero__copy" ref={copyRef}>
         <p className="hero__eyebrow">Free · instant · browser-only</p>
         <h1 className="hero__title">

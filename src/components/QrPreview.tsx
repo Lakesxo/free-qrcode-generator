@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { downloadDataUrl } from "../lib/qr";
-import { useStats } from "../hooks/useStats";
+import { useQrDownload } from "../hooks/useQrDownload";
 import "./QrPreview.css";
 
 gsap.registerPlugin(useGSAP);
@@ -25,7 +24,7 @@ export function QrPreview({
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const downloadRef = useRef<HTMLButtonElement>(null);
-  const { trackDownload } = useStats();
+  const downloadQr = useQrDownload();
 
   useGSAP(
     () => {
@@ -94,8 +93,7 @@ export function QrPreview({
 
   const handleDownload = () => {
     if (!dataUrl) return;
-    downloadDataUrl(dataUrl);
-    void trackDownload();
+    downloadQr(dataUrl);
   };
 
   return (
