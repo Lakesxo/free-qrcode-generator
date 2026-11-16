@@ -6,9 +6,8 @@ export function useQrDownload() {
   const { trackDownload } = useStats();
 
   return useCallback(
-    (dataUrl: string) => {
-      downloadDataUrl(dataUrl);
-      void trackDownload();
+    async (dataUrl: string) => {
+      if (await downloadDataUrl(dataUrl)) void trackDownload();
     },
     [trackDownload],
   );

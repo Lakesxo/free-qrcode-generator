@@ -115,9 +115,57 @@ export async function generateQrDataUrl(value: string): Promise<QrGenerateResult
   }
 }
 
-export function downloadDataUrl(dataUrl: string, filename = "qrbie.png") {
+function dataUrlToBlob(dataUrl: string): Blob {
+  const [header, base64] = dataUrl.split(",");
+  const mime = header.match(/data:([^;]+)/)?.[1] ?? "image/png";
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+function prefersShareSheet(): boolean {
+  return (
+    typeof navigator.canShare === "function" &&
+    window.matchMedia("(pointer: coarse)").matches
+  );
+}
+
+function saveBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  link.href = dataUrl;
+  link.href = url;
   link.download = filename;
+  link.style.display = "none";
+  document.body.appendChild(link);
   link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30_000);
+}
+
+/** Resolves false when the user dismisses the share sheet. */
+export async function downloadDataUrl(
+  dataUrl: string,
+  filename = "qrbie.png",
+): Promise<boolean> {
+  const blob = dataUrlToBlob(dataUrl);
+
+  // iOS Safari ignores `download` on data URLs and saves to Files at best;
+  // the share sheet offers "Save Image" to Photos. Must run inside the tap.
+  if (prefersShareSheet()) {
+    const file = new File([blob], filename, { type: blob.type });
+    if (navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+        return true;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return false;
+        }
+      }
+    }
+  }
+
+  saveBlob(blob, filename);
+  return true;
 }

@@ -1,11 +1,11 @@
 # Qrbie
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Live Demo](https://img.shields.io/badge/demo-live-1f6b5c.svg)](https://freeqr-code.netlify.app/)
+[![Live Demo](https://img.shields.io/badge/demo-live-1f6b5c.svg)](https://qrbie.netlify.app/)
 
 **Qrbie** (QR + freebie) is a free, browser-first QR code generator. Paste a URL (or deep-link with `?url=`), preview a scannable code with the site favicon, and download a PNG. No account. No upload of your link to generate the QR.
 
-**Live demo:** [https://freeqr-code.netlify.app/](https://freeqr-code.netlify.app/)
+**Live demo:** [https://qrbie.netlify.app/](https://qrbie.netlify.app/)
 
 ---
 
@@ -84,7 +84,7 @@ Your product can send users here with a target URL already set.
 |------|--------|
 | Query param | `url` (canonical) |
 | Encoding | `encodeURIComponent(targetUrl)` |
-| Example | `https://freeqr-code.netlify.app/?url=https%3A%2F%2Fexample.com%2Fpath` |
+| Example | `https://qrbie.netlify.app/?url=https%3A%2F%2Fexample.com%2Fpath` |
 
 ### Behavior
 
@@ -98,54 +98,9 @@ Your product can send users here with a target URL already set.
 
 ```js
 const target = "https://example.com/invite/abc";
-const qrbie = "https://freeqr-code.netlify.app/";
+const qrbie = "https://qrbie.netlify.app/";
 window.location.href = `${qrbie}?url=${encodeURIComponent(target)}`;
 ```
-
----
-
-## Download stats
-
-The header counter increments when someone downloads a PNG (not when a preview is generated).
-
-### Local development
-
-- API: `GET /api/stats`, `POST /api/stats/increment`
-- Storage: `data/stats.json` (created on first use; gitignored)
-- Vite proxies `/api` → `http://localhost:8787`
-
-### Production (Netlify)
-
-- Same paths via redirects in `netlify.toml`
-- Handlers: `netlify/functions/stats.ts`, `netlify/functions/stats-increment.ts`
-- Storage: Netlify Blobs (`qrbie-stats` / `downloads`)
-- Functions call `connectLambda(event)` so Blobs get the correct runtime context
-
-If the stats API is unavailable, the app still generates and downloads QR codes; the counter may stay at `0`.
-
-Optional: set `VITE_API_BASE` at build time if the API lives on another origin.
-
----
-
-## Deploy to Netlify
-
-This repo is set up for Netlify via `netlify.toml`:
-
-- **Build command:** `npm run build`
-- **Publish directory:** `dist`
-- **Functions:** `netlify/functions`
-- **Redirects:** `/api/stats` and `/api/stats/increment` → Functions; SPA fallback for the app
-
-### Steps
-
-1. Push to GitHub (or connect this repository).
-2. Create a new Netlify site from the repo.
-3. Confirm build settings match `netlify.toml` (usually auto-detected).
-4. Deploy.
-5. Verify:
-   - Site loads
-   - `https://your-site.netlify.app/api/stats` returns `{"count":…}`
-   - Downloading a PNG increments the counter
 
 ---
 
