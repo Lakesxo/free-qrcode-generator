@@ -1,55 +1,68 @@
 import type { MouseEvent } from "react";
-import gsap from "gsap";
 import { faq } from "../content/faq";
 import "./Faq.css";
 
 const CLOSING = "is-closing";
+const endHandlers = new WeakMap<HTMLElement, (event: TransitionEvent) => void>();
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function onHeightEnd(panel: HTMLElement, handler: () => void) {
+  const previous = endHandlers.get(panel);
+  if (previous) panel.removeEventListener("transitionend", previous);
+
+  const next = (event: TransitionEvent) => {
+    if (event.target !== panel || event.propertyName !== "height") return;
+    panel.removeEventListener("transitionend", next);
+    endHandlers.delete(panel);
+    handler();
+  };
+
+  endHandlers.set(panel, next);
+  panel.addEventListener("transitionend", next);
+}
+
+function lockHeight(panel: HTMLElement, height: number) {
+  panel.style.height = `${Math.max(height, 0)}px`;
+}
 
 function toggle(event: MouseEvent<HTMLElement>) {
   const item = event.currentTarget.parentElement as HTMLDetailsElement;
   const panel = item.querySelector<HTMLElement>(".faq__panel");
   if (!panel) return;
-
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduced) return;
+  if (prefersReducedMotion()) return;
 
   event.preventDefault();
-  gsap.killTweensOf(panel);
 
   const closing = item.open && !item.classList.contains(CLOSING);
 
   if (closing) {
     item.classList.add(CLOSING);
-    gsap.to(panel, {
-      height: 0,
-      opacity: 0,
-      duration: 0.26,
-      ease: "power2.inOut",
-      onComplete: () => {
-        item.open = false;
-        item.classList.remove(CLOSING);
-        gsap.set(panel, { clearProps: "height,opacity" });
-      },
+    lockHeight(panel, panel.getBoundingClientRect().height);
+    panel.offsetHeight;
+    lockHeight(panel, 0);
+    onHeightEnd(panel, () => {
+      item.open = false;
+      item.classList.remove(CLOSING);
+      panel.style.height = "";
     });
     return;
   }
 
-  const reopening = item.classList.contains(CLOSING);
+  const startHeight = item.classList.contains(CLOSING)
+    ? panel.getBoundingClientRect().height
+    : 0;
+
   item.classList.remove(CLOSING);
   item.open = true;
-  gsap.fromTo(
-    panel,
-    reopening ? { height: panel.offsetHeight } : { height: 0, opacity: 0 },
-    {
-      height: "auto",
-      opacity: 1,
-      duration: 0.34,
-      ease: "power3.out",
-      onComplete: () => {
-        gsap.set(panel, { clearProps: "height,opacity" });
-      },
-    },
-  );
+  lockHeight(panel, startHeight);
+  panel.offsetHeight;
+  lockHeight(panel, panel.scrollHeight);
+  onHeightEnd(panel, () => {
+    panel.style.height = "";
+  });
 }
 
 export function Faq() {

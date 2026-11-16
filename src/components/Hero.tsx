@@ -82,9 +82,12 @@ export function Hero() {
         </h1>
         <p className="hero__subtitle">
           Turn any link into a QR code in seconds. No{" "}
-          <span className="hero__nowrap">sign-up</span>, no watermark,
-          and it never expires. Download a crisp PNG, made right in your
-          browser.
+          <span className="hero__nowrap">sign-up</span>, no watermark
+          <span className="hero__subtitle-more">
+            , and it never expires. Download a crisp PNG, made right in your
+            browser
+          </span>
+          .
         </p>
 
         <UrlInput

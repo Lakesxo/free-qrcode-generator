@@ -34,7 +34,7 @@ export function Layout({ children }: LayoutProps) {
           hoverEffect="lift"
           clickEffect="pulse"
           lightMode
-          opacity={0.2}
+          opacity={0.22}
         />
       </div>
       <AmbientBackdrop />

@@ -77,6 +77,7 @@
 
 .faq__panel {
   overflow: hidden;
+  transition: height 180ms ease;
 }
 
 .faq__question:focus-visible {
@@ -95,7 +96,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .faq__question::after {
+  .faq__question::after,
+  .faq__panel {
     transition: none;
   }
 }

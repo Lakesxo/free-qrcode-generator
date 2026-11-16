@@ -49,7 +49,7 @@ export function UrlInput({ value, onChange, error, id = "url-input" }: UrlInputP
         </p>
       ) : (
         <p className="url-input__hint" id={`${id}-hint`}>
-          Protocol is optional. We add https when needed.
+          https:// is optional.
         </p>
       )}
     </div>

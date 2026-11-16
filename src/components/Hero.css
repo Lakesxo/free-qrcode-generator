@@ -79,3 +79,13 @@
     max-width: 42ch;
   }
 }
+
+@media (max-width: 640px) {
+  .hero__subtitle {
+    margin-bottom: var(--space-3);
+  }
+
+  .hero__subtitle-more {
+    display: none;
+  }
+}
