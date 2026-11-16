@@ -12,6 +12,7 @@ dist
 dist-ssr
 data/stats.json
 *.local
+.env
 
 # Editor directories and files
 .vscode/*

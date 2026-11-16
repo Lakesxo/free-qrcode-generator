@@ -1,29 +1,43 @@
 :root {
-  --font-display: "Fredoka", system-ui, sans-serif;
-  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "Shantell Sans", "Outfit", system-ui, sans-serif;
+  --font-body: "Outfit", system-ui, sans-serif;
 
-  --bg: #fff8f0;
-  --bg-warm: #ffe8d4;
+  --bg: #f3f2ef;
+  --bg-deep: #ebe9e4;
   --surface: #ffffff;
-  --ink: #1e1633;
-  --muted: #6b6280;
-  --border: #e8dff5;
+  --ink: #141414;
+  --muted: #6a6864;
+  --border: #ddd9d2;
+  --border-strong: #c8c3ba;
 
-  --coral: #ff6b6b;
-  --coral-dark: #e85555;
-  --sun: #ffd93d;
-  --mint: #4ecdc4;
-  --grape: #7c5cfc;
-  --grape-soft: #ede8ff;
+  --accent: #1f6b5c;
+  --accent-hover: #185548;
+  --accent-soft: #e6f1ee;
+  --accent-ink: #0f3d35;
 
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-  --radius-xl: 40px;
+  --danger: #9b2c2c;
+  --danger-soft: #f8eaea;
 
-  --shadow-soft: 0 8px 32px rgba(124, 92, 252, 0.12);
-  --shadow-card: 0 16px 48px rgba(30, 22, 51, 0.1);
-  --shadow-pop: 0 4px 0 rgba(30, 22, 51, 0.15);
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  --shadow-sm: 0 1px 2px oklch(0.2 0.02 140 / 0.04),
+    0 4px 12px oklch(0.2 0.02 140 / 0.06);
+  --shadow-md: 0 2px 4px oklch(0.2 0.02 140 / 0.04),
+    0 12px 32px oklch(0.2 0.02 140 / 0.1);
+  --shadow-lg: 0 8px 24px oklch(0.2 0.02 140 / 0.08),
+    0 24px 64px oklch(0.2 0.02 140 / 0.12);
+
+  --halo: 0 0 1px var(--bg), 0 0 2px var(--bg), 0 0 3px var(--bg),
+    0 0 6px var(--bg), 0 0 10px var(--bg), 0 0 16px var(--bg);
+  --muted-on-map: #55534f;
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 150ms;
+  --duration: 220ms;
 
   --space-1: 8px;
   --space-2: 16px;
@@ -33,4 +47,7 @@
   --space-6: 96px;
 
   --max-width: 1120px;
+  --z-ambient: 0;
+  --z-content: 1;
+  --z-modal: 1000;
 }

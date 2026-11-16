@@ -115,7 +115,7 @@ export async function generateQrDataUrl(value: string): Promise<QrGenerateResult
   }
 }
 
-export function downloadDataUrl(dataUrl: string, filename = "qrcode.png") {
+export function downloadDataUrl(dataUrl: string, filename = "qrbie.png") {
   const link = document.createElement("a");
   link.href = dataUrl;
   link.download = filename;

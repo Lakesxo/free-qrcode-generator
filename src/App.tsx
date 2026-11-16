@@ -1,7 +1,6 @@
 import { Layout } from "./components/Layout";
 import { Hero } from "./components/Hero";
-import { HowItWorks } from "./components/HowItWorks";
-import { TrustStrip } from "./components/TrustStrip";
+import { Faq } from "./components/Faq";
 import { StatsProvider } from "./context/StatsProvider";
 
 function App() {
@@ -9,8 +8,7 @@ function App() {
     <StatsProvider>
       <Layout>
         <Hero />
-        <TrustStrip />
-        <HowItWorks />
+        <Faq />
       </Layout>
     </StatsProvider>
   );

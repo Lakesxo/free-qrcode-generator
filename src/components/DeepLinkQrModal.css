@@ -1,7 +1,7 @@
 .deep-link-modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--z-modal);
   display: grid;
   place-items: center;
   padding: var(--space-3);
@@ -10,8 +10,8 @@
 .deep-link-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(30, 22, 51, 0.55);
-  backdrop-filter: blur(4px);
+  background: oklch(0.18 0.01 140 / 0.48);
+  backdrop-filter: blur(8px);
 }
 
 .deep-link-modal__panel {
@@ -19,11 +19,10 @@
   z-index: 1;
   width: min(100%, 400px);
   padding: var(--space-3);
-  padding-top: var(--space-2);
-  background: linear-gradient(165deg, #ffffff 0%, var(--grape-soft) 100%);
-  border: 3px solid var(--border);
+  background: var(--surface);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-lg);
+  outline: 1px solid var(--border);
   text-align: center;
 }
 
@@ -32,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: 40px;
   margin-bottom: var(--space-1);
   padding-inline: 44px;
 }
@@ -48,37 +47,41 @@
   height: 36px;
   padding: 0;
   border: 0;
-  border-radius: 10px;
-  background: rgba(30, 22, 51, 0.08);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
   color: var(--ink);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   line-height: 1;
+  transition-property: background-color, scale;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
 }
 
 .deep-link-modal__close:hover {
-  background: rgba(30, 22, 51, 0.12);
+  background: var(--bg-deep);
+}
+
+.deep-link-modal__close:active {
+  scale: 0.96;
 }
 
 .deep-link-modal__badge {
-  display: inline-block;
   margin: 0;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--sun);
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-pop);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .deep-link-modal__title {
-  font-size: 1.5rem;
-  margin-bottom: var(--space-1);
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
 
 .deep-link-modal__url {
   margin-bottom: var(--space-2);
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,9 +94,9 @@
   min-height: 280px;
   margin-bottom: var(--space-2);
   padding: var(--space-2);
-  background: var(--surface);
-  border: 3px dashed var(--border);
-  border-radius: var(--radius-md);
+  background: var(--bg);
+  border-radius: var(--radius-lg);
+  outline: 1px solid oklch(0 0 0 / 0.06);
 }
 
 .deep-link-modal__image {
@@ -101,22 +104,23 @@
   max-width: 280px;
   height: auto;
   border-radius: var(--radius-sm);
+  outline: 1px solid oklch(0 0 0 / 0.1);
 }
 
 .deep-link-modal__loading {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
 }
 
 .deep-link-modal__spinner {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   margin: 0 auto var(--space-1);
-  border: 4px solid var(--border);
-  border-top-color: var(--grape);
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
   border-radius: 50%;
-  animation: deep-link-spin 0.8s linear infinite;
+  animation: deep-link-spin 0.7s linear infinite;
 }
 
 @keyframes deep-link-spin {
@@ -128,24 +132,33 @@
 @media (prefers-reduced-motion: reduce) {
   .deep-link-modal__spinner {
     animation: none;
-    border-top-color: var(--grape);
   }
 }
 
 .deep-link-modal__download {
   width: 100%;
-  padding: 16px 24px;
+  min-height: 48px;
+  padding: 14px 20px;
   border: 0;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--coral), #ff8787);
-  color: white;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-pop);
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition-property: background-color, scale, opacity;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+.deep-link-modal__download:not(:disabled):hover {
+  background: var(--accent);
+}
+
+.deep-link-modal__download:not(:disabled):active {
+  scale: 0.96;
 }
 
 .deep-link-modal__download:disabled {
-  opacity: 0.45;
+  opacity: 0.35;
   cursor: not-allowed;
 }

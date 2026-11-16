@@ -1,36 +1,91 @@
 .stats-counter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
   margin: 0;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255, 217, 61, 0.35);
-  border: 2px solid rgba(255, 217, 61, 0.8);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.stats-counter__emoji {
-  line-height: 1;
+  text-align: right;
 }
 
 .stats-counter__value {
+  display: inline-flex;
   font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--grape);
+  font-size: 1.625rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
 }
 
 .stats-counter__label {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
   color: var(--muted);
-  font-weight: 600;
+}
+
+.odometer {
+  display: inline-flex;
+  line-height: 1;
+}
+
+.odometer__digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.odometer__reel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 1.1s cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.odometer__reel > span {
+  height: 1em;
+}
+
+.odometer__digit:nth-last-child(2) .odometer__reel {
+  transition-delay: 60ms;
+}
+
+.odometer__digit:nth-last-child(3) .odometer__reel {
+  transition-delay: 120ms;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .odometer__reel {
+    transition: none;
+  }
 }
 
 @media (max-width: 640px) {
   .stats-counter {
-    width: 100%;
-    justify-content: center;
-    margin-top: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  .stats-counter__value {
+    font-size: 1.375rem;
+  }
+
+  .stats-counter__label {
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
   }
 }

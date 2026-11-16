@@ -36,7 +36,7 @@ export function useUrlValidation(input: string): UrlValidation {
       return {
         valid: false,
         normalized,
-        error: "Enter a valid URL — like example.com or https://yoursite.com",
+        error: "Enter a valid URL, like example.com or https://yoursite.com",
       };
     }
 

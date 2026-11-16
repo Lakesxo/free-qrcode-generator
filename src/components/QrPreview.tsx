@@ -23,72 +23,28 @@ export function QrPreview({
 }: QrPreviewProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const downloadRef = useRef<HTMLButtonElement>(null);
   const downloadQr = useQrDownload();
 
   useGSAP(
     () => {
       if (!isReady || !imageRef.current) return;
 
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) return;
+
       gsap.fromTo(
         imageRef.current,
-        { scale: 0.85, opacity: 0, rotate: -4 },
+        { scale: 0.97, opacity: 0, filter: "blur(4px)" },
         {
           scale: 1,
           opacity: 1,
-          rotate: 0,
-          duration: 0.55,
-          ease: "back.out(1.7)",
+          filter: "blur(0px)",
+          duration: 0.45,
+          ease: "power3.out",
         },
       );
     },
     { scope: cardRef, dependencies: [isReady, dataUrl], revertOnUpdate: true },
-  );
-
-  useGSAP(
-    (_, contextSafe) => {
-      const button = downloadRef.current;
-      if (!button || !contextSafe) return;
-
-      const onEnter = contextSafe(() => {
-        gsap.to(button, {
-          scale: 1.04,
-          y: -2,
-          boxShadow: "0 8px 0 rgba(30, 22, 51, 0.18)",
-          duration: 0.2,
-          ease: "power2.out",
-        });
-      });
-
-      const onLeave = contextSafe(() => {
-        gsap.to(button, {
-          scale: 1,
-          y: 0,
-          boxShadow: "0 4px 0 rgba(30, 22, 51, 0.15)",
-          duration: 0.2,
-          ease: "power2.out",
-        });
-      });
-
-      const onClick = contextSafe(() => {
-        gsap.fromTo(
-          button,
-          { scale: 0.96 },
-          { scale: 1.04, duration: 0.15, yoyo: true, repeat: 1 },
-        );
-      });
-
-      button.addEventListener("mouseenter", onEnter);
-      button.addEventListener("mouseleave", onLeave);
-      button.addEventListener("click", onClick);
-
-      return () => {
-        button.removeEventListener("mouseenter", onEnter);
-        button.removeEventListener("mouseleave", onLeave);
-        button.removeEventListener("click", onClick);
-      };
-    },
-    { scope: cardRef, dependencies: [canDownload] },
   );
 
   const handleDownload = () => {
@@ -98,8 +54,11 @@ export function QrPreview({
 
   return (
     <div className="qr-preview" ref={cardRef}>
-      <div className="qr-preview__card">
-        <div className="qr-preview__badge">Live preview</div>
+      <div className="qr-preview__panel">
+        <div className="qr-preview__meta">
+          <span className="qr-preview__label">Preview</span>
+          <span className="qr-preview__size">512 × 512</span>
+        </div>
 
         <div
           className="qr-preview__frame"
@@ -117,20 +76,58 @@ export function QrPreview({
             />
           ) : (
             <div className="qr-preview__placeholder">
-              <span className="qr-preview__placeholder-icon" aria-hidden="true">
-                ▣
-              </span>
+              <svg
+                className={`qr-preview__glyph${isLoading ? " qr-preview__glyph--scanning" : ""}`}
+                viewBox="0 0 72 72"
+                aria-hidden="true"
+              >
+                <g className="qr-preview__glyph-frame">
+                  <path d="M2 16V8a6 6 0 0 1 6-6h8" />
+                  <path d="M56 2h8a6 6 0 0 1 6 6v8" />
+                  <path d="M70 56v8a6 6 0 0 1-6 6h-8" />
+                  <path d="M16 70H8a6 6 0 0 1-6-6v-8" />
+                </g>
+                <g className="qr-preview__glyph-finders">
+                  <rect x="14" y="14" width="14" height="14" rx="3.5" />
+                  <rect x="44" y="14" width="14" height="14" rx="3.5" />
+                  <rect x="14" y="44" width="14" height="14" rx="3.5" />
+                </g>
+                <g className="qr-preview__glyph-dots">
+                  <rect x="18.5" y="18.5" width="5" height="5" rx="1.2" />
+                  <rect x="48.5" y="18.5" width="5" height="5" rx="1.2" />
+                  <rect x="18.5" y="48.5" width="5" height="5" rx="1.2" />
+                  <rect x="33" y="14" width="5" height="5" rx="1.2" />
+                  <rect x="33" y="23" width="5" height="5" rx="1.2" />
+                  <rect x="33" y="33" width="5" height="5" rx="1.2" />
+                  <rect x="44" y="33" width="5" height="5" rx="1.2" />
+                  <rect x="53" y="33" width="5" height="5" rx="1.2" />
+                  <rect x="14" y="33" width="5" height="5" rx="1.2" />
+                  <rect x="23" y="33" width="5" height="5" rx="1.2" />
+                  <rect x="44" y="44" width="5" height="5" rx="1.2" />
+                  <rect x="53" y="53" width="5" height="5" rx="1.2" />
+                  <rect x="33" y="48" width="5" height="5" rx="1.2" />
+                  <rect x="44" y="53" width="5" height="5" rx="1.2" />
+                  <rect x="33" y="53" width="5" height="5" rx="1.2" />
+                </g>
+                <rect
+                  className="qr-preview__glyph-scan"
+                  x="8"
+                  y="0"
+                  width="56"
+                  height="2"
+                  rx="1"
+                />
+              </svg>
               <p>
                 {isLoading
-                  ? "Cooking your code…"
-                  : "Paste a URL and your QR pops up here"}
+                  ? "Generating…"
+                  : "Your code appears here after you enter a URL"}
               </p>
             </div>
           )}
         </div>
 
         <button
-          ref={downloadRef}
           type="button"
           className="qr-preview__download"
           onClick={handleDownload}

@@ -1,7 +1,7 @@
 const DEFAULT_SIZE = 128;
 const ALLOWED_SIZES = new Set([16, 32, 64, 128, 256]);
 
-/** Hostnames only — blocks URLs / SSRF-ish input. */
+/** Hostnames only. Blocks URLs / SSRF-ish input. */
 export function isSafeHostname(value: string): boolean {
   if (!value || value.length > 253) return false;
   if (value.includes("/") || value.includes(":") || value.includes(" ")) return false;

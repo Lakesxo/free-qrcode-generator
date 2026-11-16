@@ -33,18 +33,22 @@ export function Hero() {
 
   useGSAP(
     () => {
+      document.documentElement.classList.remove("intro-pending");
+
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduced) return;
 
-      const tl = gsap.timeline({ defaults: { ease: "back.out(1.4)" } });
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out", duration: 0.7 },
+      });
 
-      tl.from(".hero__eyebrow", { y: 20, opacity: 0, duration: 0.5 })
-        .from(".hero__title", { y: 36, opacity: 0, duration: 0.65 }, "-=0.25")
-        .from(".hero__subtitle", { y: 24, opacity: 0, duration: 0.5 }, "-=0.35")
-        .from(copyRef.current, { x: -24, opacity: 0, duration: 0.55 }, "-=0.2")
+      tl.from(".hero__eyebrow", { y: 16, opacity: 0, duration: 0.45 })
+        .from(".hero__title-main", { y: 28, opacity: 0 }, "-=0.28")
+        .from(".hero__subtitle", { y: 18, opacity: 0, duration: 0.5 }, "-=0.4")
+        .from(copyRef.current, { y: 12, opacity: 0, duration: 0.5 }, "-=0.3")
         .from(
           previewRef.current,
-          { x: 24, opacity: 0, scale: 0.94, duration: 0.6 },
+          { y: 20, opacity: 0, duration: 0.65 },
           "-=0.45",
         );
     },
@@ -68,14 +72,19 @@ export function Hero() {
       />
 
       <div className="hero__copy" ref={copyRef}>
-        <p className="hero__eyebrow">Free · instant · browser-only</p>
         <h1 className="hero__title">
-          Turn any link into a{" "}
-          <span className="hero__title-accent">scannable QR</span>
+          <span className="hero__eyebrow">Free QR code generator</span>
+          <span className="hero__title-main">
+            Paste a link.
+            <br />
+            <em className="hero__title-accent">Get a QR.</em>
+          </span>
         </h1>
         <p className="hero__subtitle">
-          Paste your URL, watch the preview appear, and download a PNG you can
-          drop on posters, slides, or stickers.
+          Turn any link into a QR code in seconds. No{" "}
+          <span className="hero__nowrap">sign-up</span>, no watermark,
+          and it never expires. Download a crisp PNG, made right in your
+          browser.
         </p>
 
         <UrlInput

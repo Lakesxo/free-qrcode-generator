@@ -14,33 +14,60 @@ html {
   html {
     scroll-behavior: auto;
   }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--font-body);
   font-size: 16px;
+  font-weight: 400;
   line-height: 1.6;
   color: var(--ink);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  line-height: 1.1;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
   margin: 0;
 }
 
 p {
   margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition-property: color, opacity;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+a:hover {
+  color: var(--accent-hover);
 }
 
 button,
@@ -53,6 +80,11 @@ button {
 }
 
 :focus-visible {
-  outline: 3px solid var(--grape);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
 }

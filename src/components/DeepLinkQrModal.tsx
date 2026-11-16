@@ -62,8 +62,8 @@ export function DeepLinkQrModal({
       );
       gsap.fromTo(
         panelRef.current,
-        { opacity: 0, scale: 0.88, y: 24 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" },
+        { opacity: 0, y: 16, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "power3.out" },
       );
     },
     { dependencies: [open], revertOnUpdate: true },
@@ -78,13 +78,13 @@ export function DeepLinkQrModal({
 
       gsap.fromTo(
         imageRef.current,
-        { scale: 0.8, opacity: 0, rotate: -6 },
+        { scale: 0.97, opacity: 0, filter: "blur(4px)" },
         {
           scale: 1,
           opacity: 1,
-          rotate: 0,
-          duration: 0.5,
-          ease: "back.out(1.7)",
+          filter: "blur(0px)",
+          duration: 0.4,
+          ease: "power3.out",
         },
       );
     },
@@ -115,10 +115,9 @@ export function DeepLinkQrModal({
         aria-modal="true"
         aria-labelledby="deep-link-modal-title"
         aria-describedby="deep-link-modal-desc"
-        onClick={(event) => event.stopPropagation()}
       >
         <div className="deep-link-modal__header">
-          <p className="deep-link-modal__badge">Your QR is ready</p>
+          <p className="deep-link-modal__badge">Ready</p>
           <button
             ref={closeRef}
             type="button"
@@ -126,13 +125,17 @@ export function DeepLinkQrModal({
             onClick={onClose}
             aria-label="Close"
           >
-            ×
+            <span aria-hidden="true">×</span>
           </button>
         </div>
         <h2 id="deep-link-modal-title" className="deep-link-modal__title">
-          Scan or download
+          Your code
         </h2>
-        <p id="deep-link-modal-desc" className="deep-link-modal__url" title={urlLabel}>
+        <p
+          id="deep-link-modal-desc"
+          className="deep-link-modal__url"
+          title={urlLabel}
+        >
           {urlLabel}
         </p>
 
@@ -149,7 +152,7 @@ export function DeepLinkQrModal({
           ) : (
             <div className="deep-link-modal__loading">
               <span className="deep-link-modal__spinner" aria-hidden="true" />
-              <p>Cooking your code…</p>
+              <p>Generating…</p>
             </div>
           )}
         </div>

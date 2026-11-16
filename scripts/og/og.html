@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background: #f3f2ef;
+    color: #141414;
+    font-family: Outfit, system-ui, sans-serif;
+  }
+
+  #map, .grain, .vignette { position: absolute; inset: 0; }
+  #map { width: 1200px; height: 630px; }
+  .grain {
+    opacity: 0.38;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.43 0 0 0 0 0.4 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vignette { background: radial-gradient(ellipse 85% 90% at 50% 45%, transparent 55%, rgb(120 112 98 / 0.14) 100%); }
+
+  .content {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 430px;
+    gap: 56px;
+    padding: 64px 76px 60px 80px;
+  }
+
+  .copy { display: flex; flex-direction: column; }
+
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand svg { width: 50px; height: 50px; border-radius: 12px; box-shadow: 0 2px 6px rgb(20 20 20 / 0.12); }
+  .brand span { font-family: "Shantell Sans"; font-weight: 700; font-size: 34px; letter-spacing: -0.02em; }
+
+  .eyebrow {
+    margin-top: 56px;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6a6864;
+  }
+
+  h1 {
+    margin-top: 14px;
+    font-family: "Shantell Sans";
+    font-weight: 700;
+    font-size: 88px;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+  }
+  h1 em { font-style: normal; color: #1f6b5c; display: block; }
+
+  .perks { margin-top: auto; display: flex; gap: 10px; }
+  .perk {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px 10px 12px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.8);
+    outline: 1px solid rgb(20 20 20 / 0.07);
+    box-shadow: 0 1px 2px rgb(20 20 20 / 0.05);
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .perk svg { width: 20px; height: 20px; }
+
+  .side { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 22px; }
+
+  .card {
+    position: relative;
+    width: 430px;
+    padding: 26px;
+    border-radius: 40px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgb(20 20 20 / 0.06),
+      0 10px 24px -8px rgb(20 20 20 / 0.12),
+      0 40px 80px -24px rgb(31 107 92 / 0.28);
+    outline: 1px solid rgb(20 20 20 / 0.05);
+  }
+  .frame {
+    position: relative;
+    padding: 22px;
+    border-radius: 26px;
+    background: #f3f2ef;
+  }
+  .qr { position: relative; border-radius: 14px; overflow: hidden; background: #fff; outline: 1px solid rgb(20 20 20 / 0.06); }
+  .qr > svg { display: block; width: 100%; height: auto; }
+  .plate {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    border-radius: 22%;
+    background: #fff;
+  }
+  .plate svg { width: 70%; height: 70%; border-radius: 18%; }
+
+  .corner { position: absolute; width: 34px; height: 34px; border: 3.5px solid #1f6b5c; opacity: 0.75; }
+  .corner.tl { left: 8px; top: 8px; border-right: 0; border-bottom: 0; border-top-left-radius: 14px; }
+  .corner.tr { right: 8px; top: 8px; border-left: 0; border-bottom: 0; border-top-right-radius: 14px; }
+  .corner.bl { left: 8px; bottom: 8px; border-right: 0; border-top: 0; border-bottom-left-radius: 14px; }
+  .corner.br { right: 8px; bottom: 8px; border-left: 0; border-top: 0; border-bottom-right-radius: 14px; }
+
+  .url {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 500;
+    color: #3d3b37;
+  }
+  .url::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1f6b5c;
+    box-shadow: 0 0 0 4px rgb(31 107 92 / 0.15);
+  }
+</style>
+</head>
+<body>
+  <canvas id="map" width="1200" height="630"></canvas>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <div class="content">
+    <div class="copy">
+      <div class="brand">%LOGO%<span>Qrbie</span></div>
+      <p class="eyebrow">Free QR code generator</p>
+      <h1>Paste a link.<em>Get a QR.</em></h1>
+      <div class="perks">
+        <span class="perk">%CHECK%No sign-up</span>
+        <span class="perk">%CHECK%No watermark</span>
+        <span class="perk">%CHECK%Never expires</span>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <div class="frame">
+          <span class="corner tl"></span><span class="corner tr"></span>
+          <span class="corner bl"></span><span class="corner br"></span>
+          <div class="qr">%QR%<div class="plate">%LOGO%</div></div>
+        </div>
+      </div>
+      <p class="url">%HOST%</p>
+    </div>
+  </div>
+
+  <script>
+    // Contour map in the site's ink-line style, thinned out behind the copy.
+    const canvas = document.getElementById("map");
+    const ctx = canvas.getContext("2d");
+    const W = 1200, H = 630, CELL = 6;
+
+    let seed = 7;
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const grid = Array.from({ length: 64 }, () => Array.from({ length: 64 }, rand));
+    const smooth = (t) => t * t * (3 - 2 * t);
+    const noise = (x, y) => {
+      const xi = Math.floor(x), yi = Math.floor(y);
+      const xf = smooth(x - xi), yf = smooth(y - yi);
+      const g = (i, j) => grid[(yi + j) & 63][(xi + i) & 63];
+      const a = g(0, 0) + (g(1, 0) - g(0, 0)) * xf;
+      const b = g(0, 1) + (g(1, 1) - g(0, 1)) * xf;
+      return a + (b - a) * yf;
+    };
+    const field = (x, y) =>
+      noise(x / 260, y / 260) * 0.62 + noise(x / 120 + 9, y / 120 + 4) * 0.28 + noise(x / 55 + 3, y / 55 + 7) * 0.1;
+
+    const cols = Math.ceil(W / CELL) + 1, rows = Math.ceil(H / CELL) + 1;
+    const v = [];
+    for (let j = 0; j < rows; j++) {
+      v[j] = [];
+      for (let i = 0; i < cols; i++) v[j][i] = field(i * CELL, j * CELL);
+    }
+
+    const clearing = (x, y) => {
+      const copy = Math.hypot((x - 380) / 470, (y - 300) / 330);
+      const card = Math.hypot((x - 930) / 300, (y - 290) / 300);
+      const fade = (d) => Math.min(1, Math.max(0, (d - 0.55) / 0.6));
+      return Math.min(fade(copy), 0.35 + 0.65 * fade(card));
+    };
+
+    const levels = 26;
+    for (let l = 1; l < levels; l++) {
+      const t = 0.18 + (l / levels) * 0.62;
+      const major = l % 5 === 0;
+      ctx.lineWidth = major ? 1.5 : 1;
+      for (let j = 0; j < rows - 1; j++) {
+        for (let i = 0; i < cols - 1; i++) {
+          const a = v[j][i], b = v[j][i + 1], c = v[j + 1][i + 1], d = v[j + 1][i];
+          const idx = (a > t) | ((b > t) << 1) | ((c > t) << 2) | ((d > t) << 3);
+          if (idx === 0 || idx === 15) continue;
+          const x = i * CELL, y = j * CELL;
+          const lerp = (p, q) => (t - p) / (q - p);
+          const top = [x + CELL * lerp(a, b), y];
+          const right = [x + CELL, y + CELL * lerp(b, c)];
+          const bottom = [x + CELL * lerp(d, c), y + CELL];
+          const left = [x, y + CELL * lerp(a, d)];
+          const segs = {
+            1: [[left, top]], 2: [[top, right]], 3: [[left, right]], 4: [[right, bottom]],
+            5: [[left, top], [right, bottom]], 6: [[top, bottom]], 7: [[left, bottom]],
+            8: [[bottom, left]], 9: [[bottom, top]], 10: [[top, right], [bottom, left]],
+            11: [[bottom, right]], 12: [[right, left]], 13: [[right, top]], 14: [[top, left]],
+          }[idx];
+          const alpha = (major ? 0.42 : 0.26) * clearing(x, y);
+          if (alpha < 0.01) continue;
+          ctx.strokeStyle = `rgb(77 122 109 / ${alpha})`;
+          ctx.beginPath();
+          for (const [p, q] of segs) { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); }
+          ctx.stroke();
+        }
+      }
+    }
+  </script>
+</body>
+</html>

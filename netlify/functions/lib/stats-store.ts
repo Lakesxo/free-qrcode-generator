@@ -1,6 +1,6 @@
 import { getStore } from "@netlify/blobs";
 
-const STORE_NAME = "free-qrcode-stats";
+const STORE_NAME = "qrbie-stats";
 const COUNT_KEY = "downloads";
 
 export const corsHeaders = {

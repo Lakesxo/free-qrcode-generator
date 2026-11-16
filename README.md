@@ -1,9 +1,9 @@
-# Free QR
+# Qrbie
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Live Demo](https://img.shields.io/badge/demo-live-4ecdc4.svg)](https://freeqr-code.netlify.app/)
+[![Live Demo](https://img.shields.io/badge/demo-live-1f6b5c.svg)](https://freeqr-code.netlify.app/)
 
-A free, browser-first QR code generator. Paste a URL (or deep-link with `?url=`), preview a scannable code, and download a PNG — no account, no upload of your link to generate the QR.
+**Qrbie** (QR + freebie) is a free, browser-first QR code generator. Paste a URL (or deep-link with `?url=`), preview a scannable code with the site favicon, and download a PNG. No account. No upload of your link to generate the QR.
 
 **Live demo:** [https://freeqr-code.netlify.app/](https://freeqr-code.netlify.app/)
 
@@ -11,13 +11,13 @@ A free, browser-first QR code generator. Paste a URL (or deep-link with `?url=`)
 
 ## Features
 
-- **URL → PNG** — Generate a 512×512 QR code in the browser
-- **Live preview** — Updates as you type (debounced)
-- **Smart URL handling** — Adds `https://` when the protocol is missing
-- **Deep linking** — Open `/?url=...` from another app to prefill and show a download modal
-- **Download counter** — Tracks PNG downloads (local API in development, Netlify Functions + Blobs in production)
-- **Privacy-friendly generation** — QR rendering stays on the client; only download counts hit the stats API
-- **Accessible motion** — GSAP animations respect `prefers-reduced-motion`
+- **URL → PNG**: Generate a 512×512 QR code in the browser
+- **Live preview**: Updates as you type (debounced)
+- **Smart URL handling**: Adds `https://` when the protocol is missing
+- **Deep linking**: Open `/?url=...` from another app to prefill and show a download modal
+- **Download counter**: Tracks PNG downloads (local API in development, Netlify Functions + Blobs in production)
+- **Privacy-friendly generation**: QR rendering stays on the client; only download counts hit the stats API
+- **Accessible motion**: GSAP animations respect `prefers-reduced-motion`
 
 ---
 
@@ -48,8 +48,8 @@ Then open the URL Vite prints (usually `http://localhost:5173`).
 
 `npm run dev` starts:
 
-1. **Vite** — the React app  
-2. **Local stats API** — `http://localhost:8787` (proxied as `/api` by Vite)
+1. **Vite**: the React app  
+2. **Local stats API**: `http://localhost:8787` (proxied as `/api` by Vite)
 
 ### Try a deep link locally
 
@@ -98,8 +98,8 @@ Your product can send users here with a target URL already set.
 
 ```js
 const target = "https://example.com/invite/abc";
-const freeQr = "https://freeqr-code.netlify.app/";
-window.location.href = `${freeQr}?url=${encodeURIComponent(target)}`;
+const qrbie = "https://freeqr-code.netlify.app/";
+window.location.href = `${qrbie}?url=${encodeURIComponent(target)}`;
 ```
 
 ---
@@ -118,7 +118,7 @@ The header counter increments when someone downloads a PNG (not when a preview i
 
 - Same paths via redirects in `netlify.toml`
 - Handlers: `netlify/functions/stats.ts`, `netlify/functions/stats-increment.ts`
-- Storage: Netlify Blobs (`free-qrcode-stats` / `downloads`)
+- Storage: Netlify Blobs (`qrbie-stats` / `downloads`)
 - Functions call `connectLambda(event)` so Blobs get the correct runtime context
 
 If the stats API is unavailable, the app still generates and downloads QR codes; the counter may stay at `0`.
@@ -170,7 +170,7 @@ This repo is set up for Netlify via `netlify.toml`:
 
 ## Contributing
 
-Contributions are welcome — bug fixes, docs, accessibility, and focused features.
+Contributions are welcome: bug fixes, docs, accessibility, and focused features.
 
 ### 1. Fork and branch
 
@@ -185,40 +185,52 @@ npm run dev
 ### 2. Make a focused change
 
 - Prefer one concern per PR (feature, fix, or docs).
-- Match existing patterns: TypeScript, CSS modules/files next to components, GSAP via `useGSAP` with a scope.
-- Keep the playful UI direction unless you’re intentionally improving accessibility or clarity.
+- Match existing patterns: TypeScript, CSS next to components, GSAP via `useGSAP` with a scope.
+- Keep the current premium visual direction unless the PR is intentionally about redesign or accessibility.
 - Don’t commit secrets, local `data/stats.json`, or `dist/`.
 
 ### 3. Check before opening a PR
+
+Run:
 
 ```bash
 npm run lint
 npm run build
 ```
 
-Manually verify:
+Both must pass.
 
-- [ ] Paste a URL → preview updates  
-- [ ] Download PNG works  
-- [ ] Invalid URL shows an error (no crash)  
-- [ ] Deep link: `/?url=https%3A%2F%2Fexample.com` opens the modal when valid  
-- [ ] Counter updates after download when the stats API is running  
+Then manually smoke-test the flows your change could affect (at minimum the core path if you touched QR, UI, deep link, or stats):
 
-### 4. Open a pull request
+- [ ] Paste a valid URL → preview updates (favicon branding when the favicon API is up)
+- [ ] Download PNG works
+- [ ] Invalid URL shows an inline error (no crash)
+- [ ] Deep link `/?url=https%3A%2F%2Fexample.com` opens the modal when valid
+- [ ] Counter updates after download when the stats API is running (`npm run dev`)
 
-- Describe **what** changed and **why**.
-- Link related issues.
-- Include screenshots or a short clip for UI changes.
-- Keep the PR reviewable (small > huge).
+### 4. Open a pull request (required proof)
+
+PRs should be small enough to review. In the PR description, include:
+
+1. **Summary:** what changed and why (link the issue if there is one).
+2. **Test plan:** paste the checklist above and mark what you ran. Note anything you skipped and why.
+3. **Proof**
+   - **UI changes:** before/after screenshots, or a short screen recording (desktop and/or mobile as relevant).
+   - **QR / download / deep-link behavior:** screenshot of the preview or modal, and confirm download still produces a scannable PNG.
+   - **API / stats / favicon proxy:** note the exact requests you hit (e.g. `GET /api/stats`, `GET /api/favicon?domain=…`) and the result.
+   - **Docs-only:** no screenshots required; say which sections you updated.
+4. **Risk / notes:** anything reviewers should watch for (breaking deep-link contract, Netlify-only behavior, etc.).
+
+PRs missing a test plan or proof for behavioral/UI changes may be asked to update before review.
 
 ### Ideas for contribution
 
 Open an issue first for larger ideas. Good starting points:
 
-- Accessibility and keyboard polish  
-- Tests for URL validation / deep-link parsing  
-- SVG export, colors, or error-correction options  
-- Docs and examples for more host platforms  
+- Accessibility and keyboard polish
+- Tests for URL validation / deep-link parsing
+- SVG export, colors, or error-correction options
+- Docs and examples for more host platforms
 
 ---
 
